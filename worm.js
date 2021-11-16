@@ -147,6 +147,11 @@ document.addEventListener('keydown', (event) => {
 
 //starter spillet når man trykker på noe
 function gameLoop(){
+    
+const winningMessageElement = document.getElementById('winningMessage')
+const restartButton = document.getElementById('restartButton')
+const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
+    
     if(play){
         if(moveQueue.length > 1){
             //fjerner brukte komandoer fra bevegelseslisten
