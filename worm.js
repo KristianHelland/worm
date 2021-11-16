@@ -158,6 +158,7 @@ function gameLoop(){
 
         //sjekker om marken kolliderer med en vegg
         if ((wormHead.x >= gridSize) || (wormHead.y >= gridSize) || (wormHead.x < 0) || (wormHead.y < 0)) {
+             winningMessageElement.classList.add('show')
             return
         }
 
@@ -191,6 +192,7 @@ function gameLoop(){
 
         //sjekker om marken kolliderer med seg selv
         if (grid[wormHead.y][wormHead.x] != 0 && grid[wormHead.y][wormHead.x] != 5) {
+             winningMessageElement.classList.add('show')
             return
         }
      
