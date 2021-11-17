@@ -11,29 +11,40 @@ let tileColors = ["#269020", "green"]
 let lineColor = "gray"
 let wormColors = ["#FF89D8", "#FFD0FF"]
 let dirtColor = "#6A4242"
+let restart = false;
 
 //setter opp antall fliser det er på canvaset
-let gridSize = 20 
+let gridSize = 15   
 
 //setter en refrshrate
 //den bestemmer hvor fort marken beveger seg
-const FPS = 10
+let FPS = 6
 let play = false
-let score = 0;
+let score = 0
 
 let lineSize = canvas.height/(gridSize*10)
 let tileSize = (canvas.width/gridSize)-lineSize - lineSize/gridSize
 
 //sjekker om griden er riktig størrelse om den ikke er det så legger den til 1
-let grid =[]
-for(let y = 0; y<gridSize; y++) {
-    grid.push([])
-    for(let x = 0; x<gridSize; x++) {
-        grid[y].push(0)
+function createGrid(size) {
+    let grid = []
+    for (let i = 0; i < size; i++) {
+        grid.push([])
     }
+    grid.forEach(value => {
+        for (let i = 0; i < size; i++) {
+            value.push(0)
+        }
+    })
+    return grid
 }
 
-console.log(grid)
+
+let grid = createGrid(gridSize)
+
+createGrid()
+
+
 
 //definerer hvor marken skal starte og hvilken vei den beveger seg
 //hodet til marken begynner midt i rutenettet og fem fliser fra høyre
@@ -44,7 +55,7 @@ let wormTail = {x: 2,y:Math.floor(gridSize/2)}
 let wormTailPrev = {x: undefined, y: undefined}
 let dirtPos = {x:gridSize-3, y: Math.floor(gridSize/2)}
 
-//legger til eple
+//legger til dirt
 grid[dirtPos.y][dirtPos.x] = 5
 
 //legger til en mark
@@ -56,25 +67,27 @@ for(let x = 0; x<4; x++) {
 //setter  hodet sin vei som verdi i rutenettet
 let moveQueue = [grid[wormHead.y][wormHead.x]]
 
+
 //retninger til marken
 function moveWormPart(wormPart, direction){
-    //får slangen til å gå mot lavere kordinater på y aksen i rutenettet / gå opp
+    //får marken til å gå mot lavere kordinater på y aksen i rutenettet / gå opp
     if(direction == 1){
         wormPart.y--
     }
-    //får slangen til å gå mot høyere kordinater på x aksen i rutenettet / gå til høyre
+    //får marken til å gå mot høyere kordinater på x aksen i rutenettet / gå til høyre
     else if(direction == 2){
         wormPart.x++
     }
-    //får slangen til å gå mot høyere kordinater på y aksen i rutenettet / gå ned
+    //får marken til å gå mot høyere kordinater på y aksen i rutenettet / gå ned
     else if(direction == 3){
         wormPart.y++
     }
-    //får slangen til å gå mot lavere kordinater på x aksen i rutenettet / gå til venstre
+    //får marken til å gå mot lavere kordinater på x aksen i rutenettet / gå til venstre
     else{
         wormPart.x--
     }
 }
+
 
 function drawGame() {
     //tegner linjene
@@ -144,30 +157,58 @@ document.addEventListener('keydown', (event) => {
     }
 })
 
+//Øker farten på marken
+function speedUp(){
+    FPS += 1
+    document.getElementById("FPS").innerHTML = FPS;
+}
+
+//senker farten på marken
+function speedDown(){
+    FPS -= 1
+    document.getElementById("FPS").innerHTML = FPS;
+}
+
 
 //starter spillet når man trykker på noe
 function gameLoop(){
-    
-const winningMessageElement = document.getElementById('winningMessage')
-const restartButton = document.getElementById('restartButton')
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
-    
+
+    //henter IDen til elementer i HTML slik at vi kan justere dem med JS
+    const speedUp = document.getElementById("speedUp")
+    const speedDown = document.getElementById("speedDown")
+    const winningMessageElement = document.getElementById('winningMessage')
+    const restartButton = document.getElementById('restartButton')
+    const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
+
+
+
     if(play){
+        
+        if(play = true){
+            //fjerner knappene når spillet starter
+            speedDown.classList.add('hide')
+            speedUp.classList.add('hide')
+        }
+
         if(moveQueue.length > 1){
             //fjerner brukte komandoer fra bevegelseslisten
             moveQueue.shift()
         }
+
+        //pusher ut FPS nummeret uten decimaler
+        document.getElementById("FPS").innerHTML = FPS.toFixed(0);
+
         //flytter hodet
         grid[wormHead.y][wormHead.x] = moveQueue[0]
         moveWormPart(wormHead, grid[wormHead.y][wormHead.x])
 
         //sjekker om marken kolliderer med en vegg
         if ((wormHead.x >= gridSize) || (wormHead.y >= gridSize) || (wormHead.x < 0) || (wormHead.y < 0)) {
-             winningMessageElement.classList.add('show')
+            winningMessageElement.classList.add('show')
             return
         }
 
-        //hvis eplet blir spist så beverger ikke halen seg med en gang
+        //hvis jorden blir spist så beverger ikke halen seg med en gang
         if(grid[wormHead.y][wormHead.x] != 5){
             wormTailPrev = {x: wormTail.x, y:wormTail.y}
             moveWormPart(wormTail, grid[wormTail.y][wormTail.x])
@@ -194,22 +235,31 @@ const winningMessageTextElement = document.querySelector('[data-winning-message-
                 document.getElementById('score').innerHTML = score;
               }
         }
-
+        
         //sjekker om marken kolliderer med seg selv
-        if (grid[wormHead.y][wormHead.x] != 0 && grid[wormHead.y][wormHead.x] != 5) {
-             winningMessageElement.classList.add('show')
-            return
+        if (grid[wormHead.y][wormHead.x] > 0 && grid[wormHead.y][wormHead.x] < 5) {
+        winningMessageElement.classList.add('show')
+        return
         }
-     
 
         //overskriver hodets posisjon med ny rettning
         grid[wormHead.y][wormHead.x] = moveQueue[0]
+
+        //sjekker om scoren er null og hvis den er det skal ikke noe skje
+        if(score == 0){
+
+        }
+        //sjekker om scoren er i fem gangen og om den er det så økes farten med 1/20 per frame til neste jordflekk er spist
+        else if(score % 5 == 0){
+            FPS += 0.05
+        }
         
     }
-    //kjører spillet for evig
     drawGame()
     setTimeout(gameLoop,1000/FPS)
 }
+
+
 
 //caller scriptet gameloop som får spillet til å kjøre til man taper
 gameLoop()

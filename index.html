@@ -6,13 +6,25 @@
     <title>Worms</title>
 </head>
 <body>
-    <div id="score">0</div>
-    
-    <div class="winning-message" id="winningMessage">
-        <div id="winningMessage" data-winning-message-text>Game over <br> Press F5 to restart</div>
+    <div class="flex-container">
+            <div class="speed-container">
+                <button id="speedUp" onclick="speedUp()">Speed+</button>
+
+                <div id="text">Speed count: 
+                    <div id="FPS">6</div>
+                </div>
+
+                <button id="speedDown" onclick="speedDown()">Speed-</button>
+            </div>
+        <div id="score">0</div>
     </div>
-    
+
     <canvas id="wormBoard"></canvas>
     <script src="worm.js"></script>
+
+    <div class="winning-message" id="winningMessage">
+        <div id="winningMessage">Game over<br>Press F5 to restart</div>
+    </div>
+    
 </body>
 </html>

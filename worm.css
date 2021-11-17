@@ -1,3 +1,15 @@
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    height: 15vh;
+    justify-content: space-around;
+}
+
+.speed-container{
+    display:flex ;
+    flex-direction: column;
+    justify-content: space-around;
+}
 #wormBoard{
     position: absolute;
     top: 0;
@@ -8,9 +20,19 @@
 }
 
 #score{
-    color: rgb(255, 255, 255);
-    text-align: center;
-    font-size: 140px;
+    color:gray;
+    font-size: 15vh;
+    padding: 0;
+    justify-self: center;
+    align-self:center ;
+}
+
+#FPS{
+    color: white;
+}
+
+#text{
+    color: white;
 }
 
 .winning-message{
@@ -28,7 +50,6 @@
     color: white;
     font-size: 5rem;
     padding: 0;
-    z-index: 5;
     
 }
 
@@ -53,8 +74,28 @@
     display: flex;
 }
 
+
+
 body{
     background-color: black;
 }
+
+#speedUp{
+    display: block;
+}
+
+#speedDown{
+    display: block;
+}
+
+#speedUp.hide{
+    display: none;
+}
+
+#speedDown.hide{
+    display: none;
+}
+
+
 
 
