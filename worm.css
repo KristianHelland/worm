@@ -8,10 +8,12 @@
     display:flex ;
     flex-direction: column;
     float: left;
+    justify-content:space-around ;
 }
 
 .flex-container2{
     display: flex;
+    flex-direction: column;
     color: white;
     justify-content: space-between;
 }

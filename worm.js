@@ -11,7 +11,6 @@ let tileColors = ["#269020", "green"]
 let lineColor = "gray"
 let wormColors = ["#FF89D8", "#FFD0FF"]
 let dirtColor = "#6A4242"
-let restart = false;
 
 //setter opp antall fliser det er på canvaset
 let gridSize = 15   
@@ -181,7 +180,6 @@ function gameLoop(){
     const speedUp = document.getElementById("speedUp")
     const speedDown = document.getElementById("speedDown")
     const winningMessageElement = document.getElementById('winningMessage')
-    const restartButton = document.getElementById('restartButton')
     const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 
 
