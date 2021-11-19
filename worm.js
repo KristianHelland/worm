@@ -159,14 +159,18 @@ document.addEventListener('keydown', (event) => {
 
 //Øker farten på marken
 function speedUp(){
-    FPS += 1
-    document.getElementById("FPS").innerHTML = FPS;
+    if(FPS < 12){
+        FPS += 1
+        document.getElementById("FPS").innerHTML = FPS;
+ }
 }
 
 //senker farten på marken
 function speedDown(){
-    FPS -= 1
+    if (FPS > 1 ) {
+        FPS -= 1
     document.getElementById("FPS").innerHTML = FPS;
+    }
 }
 
 
